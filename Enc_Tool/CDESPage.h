@@ -1,8 +1,7 @@
 ﻿#pragma once
-
+#include "MyCEdit.h"
 
 // CDESPage 对话框
-
 class CDESPage : public CDialogEx
 {
 	DECLARE_DYNAMIC(CDESPage)
@@ -28,4 +27,14 @@ public:
 	virtual BOOL OnInitDialog();
 private:
 	CComboBox m_padding_cbox;
+private:
+	MyCEdit m_EncData;
+	MyCEdit m_Data;
+	CString m_iv;
+	CString m_key;
+public:
+	afx_msg void OnBnClickedButtonEnc();
+	afx_msg void OnBnClickedButtonDec();
+	afx_msg void OnBnClickedButtonImportdata();
+	afx_msg void OnBnClickedButtonImportencdata();
 };

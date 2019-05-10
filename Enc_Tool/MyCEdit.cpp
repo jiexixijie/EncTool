@@ -4,7 +4,7 @@
 #include "pch.h"
 #include "Enc_Tool.h"
 #include "MyCEdit.h"
-
+#include "EnumList.h"
 
 // MyCEdit
 

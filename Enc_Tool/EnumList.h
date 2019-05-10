@@ -37,3 +37,8 @@ void DecBase64(char* base64Char, int base64CharLen, char* outStr, int& outStrLen
 int SaveData(CString filepath, char* Data, ULONGLONG Datalen);
 
 CString FileDlg_Save(char* Data, ULONGLONG Datalen);
+CString FileDlg_GetSavePath();
+//字符串换行符转换  0:windows 转 unix 1:unix转windows
+CString TransData(CString A, int type);
+
+int WriteCstringFileWC_MB(char* filename, CString data);

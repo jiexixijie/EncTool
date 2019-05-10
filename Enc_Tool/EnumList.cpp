@@ -49,15 +49,11 @@ void DecBase64(char* base64Char, int base64CharLen, char* outStr, int& outStrLen
 		int c0 = toInt[base64Char[i]]; // 获取一组中第一个BASE64编码号
 		int c1 = toInt[base64Char[i + 1]];// 获取一组中第二个BASE64编码号
 		outStr[index++] = (((c0 << 2) | (c1 >> 4)) & int255);  //c0后6位  和c1去完前2位的  的前2位  组成8bit 再转换成字符  
-		if (index >= base64CharLen)  //如果长度小于输入进来的长度 意图去掉=
-		{
-			return;
-		}
 		int c2 = toInt[base64Char[i + 2]];// 获取一组中第三个BASE64编码号
 		outStr[index++] = (((c1 << 4) | (c2 >> 2)) & int255);  //c1的后6位和c2去完前2位的  的前2位 组成8bit  转换成字符
-		if (index >= base64CharLen)  //如果长度小于输入进来的长度  意图去掉=
-		{
-			return;
+		//若有两个'=' 提前结束
+		if (base64Char[i + 2] == '=') {
+			break;
 		}
 		int c3 = toInt[base64Char[i + 3]];// 获取一组中第四个BASE64编码号
 		outStr[index++] = (((c2 << 6) | c3) & int255); //c2的后2位和c3的后6位  组成8bit 转换成字符
@@ -90,17 +86,78 @@ int SaveData(CString filepath, char* Data, ULONGLONG Datalen) {
 
 
 CString FileDlg_Save(char *Data,ULONGLONG Datalen) {
-	bool isOpen = FALSE;
-	CString filename;
-	CString filter = _T("All Files|*||");
-	CFileDialog OpenFileDlg(isOpen, NULL, filename, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST, filter, NULL);
-	if (OpenFileDlg.DoModal() == IDOK) {
-		if (SaveData(OpenFileDlg.GetPathName(), Data, Datalen) != Success) {
+	CString FilePath = FileDlg_GetSavePath();
+	if (!FilePath.IsEmpty()) {
+		if (SaveData(FilePath, Data, Datalen) != Success) {
 			AfxMessageBox(_T("写入失败"));
 		}
 		else {
 			AfxMessageBox(_T("写入成功"));
 		}
 	}
-	return OpenFileDlg.GetPathName();
+	return FilePath;
+}
+
+CString FileDlg_GetSavePath() {
+	bool isOpen = FALSE;
+	CString filename;
+	CString filter = _T("All Files|*||");
+	CFileDialog OpenFileDlg(isOpen, NULL, filename, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST, filter, NULL);
+	if (OpenFileDlg.DoModal() == IDOK) {
+		return OpenFileDlg.GetPathName();
+	}
+	else {
+		return NULL;
+	}
+}
+
+
+
+//字符串换行符转换
+CString TransData(CString A, int type) {
+	//换行符转换 0x0A转0x0A0x0D
+	int index = 0, start = 0;
+	CString temp;
+	//0:windows 转 unix 1 去\r : unix转windows \n 变 \r\n
+	if (type == 0) {
+		while (1)
+		{
+			index = A.Find(0x0A, index);
+			if (index < 0) {
+				//加上剩余部分
+				int a = A.GetLength();
+				//CString bbc = A.Mid(start, A.GetLength() - 1);
+				temp.Format(TEXT("%s%s"), temp, A.Mid(start, A.GetLength()));
+				break;
+			}
+			temp.Format(TEXT("%s%s\r"), temp, A.Mid(start, index - start));
+			start = index;
+			index += 1;
+		}
+	}
+	else {
+		A.Remove('\n');
+		A.Replace('\r', '\n');
+		temp = A;
+	}
+	return temp.IsEmpty() ? A : temp;
+}
+
+
+int WriteCstringFileWC_MB(char* filename, CString data) {
+	FILE* fp;
+	fopen_s(&fp, filename, "wb");
+	//unicode   char
+	if (fp == NULL) {
+		return -1;
+	}
+	int n = data.GetLength(); //获取str的字符数
+	int flen = WideCharToMultiByte(CP_ACP, 0, data, n, NULL, 0, NULL, NULL);//获取宽字节字符的大小，大小是按字节计算的
+	char* pchar = new char[flen];
+	//char* pChar = new char[flen + 1]; //以字节为单位
+	WideCharToMultiByte(CP_ACP, 0, data, n, pchar, flen, NULL, NULL); //宽字节编码转换成多字节编码
+	int wlen = fwrite(pchar, 1, flen, fp);
+	fclose(fp);
+	delete[]pchar;
+	return wlen == flen;
 }

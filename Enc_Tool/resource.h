@@ -49,6 +49,17 @@
 #define IDC_EDIT_EncData                1035
 #define IDC_EDIT_eValue                 1036
 #define IDC_COMBO_PaddingType           1037
+#define IDC_BUTTON_ImportData           1038
+#define IDC_BUTTON_ExportData           1039
+#define IDC_BUTTON_ImportEncData        1040
+#define IDC_BUTTON_ExportEncData        1041
+#define IDC_BUTTON_Enc                  1042
+#define IDC_BUTTON_Dec                  1043
+#define IDC_EDIT_Key                    1044
+#define IDC_COMBO_EncType               1045
+#define IDC_EDIT_iv                     1046
+#define IDC_BUTTON_ImportData2          1047
+#define IDC_BUTTON_ImportKey            1047
 #define RSA_DIALOG                      57665
 #define DIALOG_RSA                      57665
 
@@ -58,7 +69,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        135
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1038
+#define _APS_NEXT_CONTROL_VALUE         1047
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

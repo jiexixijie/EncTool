@@ -30,9 +30,3 @@ public:
 };
 
 extern CEncToolApp theApp;
-
-
-//字符串换行符转换  0:windows 转 unix 1:unix转windows
-CString TransData(CString A,int type);
-
-int WriteCstringFileWC_MB(char* filename, CString data);

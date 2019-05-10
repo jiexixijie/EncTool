@@ -312,6 +312,7 @@ int C_RSA::PriKey_to_Cstring(CString &PriKey, CString C_Encpwd, int CertType) {
 		int len = BIO_ctrl_pending(out);
 		char* data = (char*)OPENSSL_malloc(len);
 		len = BIO_read(out, data, len);
+		data[len - 1] = '\0';
 		PriKey = data;
 		OPENSSL_free(data);
 		error = Success;
@@ -341,6 +342,7 @@ int C_RSA::PubKey_to_Cstring(CString &PubKey, int CertType) {
 		int len = BIO_ctrl_pending(out);
 		char* data = (char*)OPENSSL_malloc(len);
 		len = BIO_read(out, data, len);
+		data[len-1] = '\0';
 		PubKey = data;
 		OPENSSL_free(data);
 		error = Success;
