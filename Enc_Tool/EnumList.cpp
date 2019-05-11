@@ -161,3 +161,11 @@ int WriteCstringFileWC_MB(char* filename, CString data) {
 	delete[]pchar;
 	return wlen == flen;
 }
+
+
+void Get_Key_Vi_c(CString key, char* key_c, CString iv, char* iv_c) {
+	int keylen = WideCharToMultiByte(CP_ACP, 0, key, key.GetLength(), NULL, 0, NULL, NULL);
+	WideCharToMultiByte(CP_ACP, 0, key, key.GetLength(), key_c, keylen, NULL, NULL);
+	int ivlen = WideCharToMultiByte(CP_ACP, 0, iv, iv.GetLength(), NULL, 0, NULL, NULL);
+	WideCharToMultiByte(CP_ACP, 0, iv, iv.GetLength(), iv_c, ivlen, NULL, NULL);
+}

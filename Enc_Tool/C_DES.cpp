@@ -3,22 +3,12 @@
 #include <iostream>
 C_DES::C_DES() {
 	error = 0;
-	m_iv = new char[8];
-	for (int i = 0; i < 8; i++)
-	{
-		m_iv[i] = i+1;
-	}
 }
 
 C_DES::~C_DES() {
-	delete[]m_iv;
 }
 int C_DES::EncData(char*msg,int msglen,char*cipher, int& cipherlen,char *key,char *iv,int type) {
 	error = Success;
-	if (iv == NULL) {
-		//设置为默认初始化向量
-		iv = m_iv;
-	}
 	EVP_CIPHER_CTX ctx;//EVP算法上下文
 	int ciphertmp;
 	int rv;
@@ -65,10 +55,6 @@ int C_DES::EncData(char*msg,int msglen,char*cipher, int& cipherlen,char *key,cha
 
 int C_DES::DecData(char* cipher, int cipherlen, char* msg, int &msglen, char* key, char* iv, int type) {
 	error = Success;
-	if (iv == NULL) {
-		//设置为默认初始化向量
-		iv = m_iv;
-	}
 	EVP_CIPHER_CTX ctx;//EVP算法上下文
 	int msgtmp;
 	int rv;
@@ -166,15 +152,3 @@ int C_DES::DecData(CString cipher, CString& msg, char* key_c, char* iv_c, int ty
 	return Success;
 }
 
-
-void Get_Key_Vi_c(CString key, char* key_c, CString iv, char* iv_c) {
-	//key和iv都为8字节
-	int keylen = WideCharToMultiByte(CP_ACP, 0, key, key.GetLength(), NULL, 0, NULL, NULL);
-	WideCharToMultiByte(CP_ACP, 0, key, key.GetLength(), key_c, keylen, NULL, NULL);
-	if (iv.IsEmpty()) {
-		iv_c = NULL;
-		return;
-	}
-	int ivlen = WideCharToMultiByte(CP_ACP, 0, iv, iv.GetLength(), NULL, 0, NULL, NULL);
-	WideCharToMultiByte(CP_ACP, 0, iv, iv.GetLength(), iv_c, keylen, NULL, NULL);
-}

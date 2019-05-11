@@ -197,6 +197,7 @@
     <ClInclude Include="CRSAPage.h" />
     <ClInclude Include="CSignVerifyPage.h" />
     <ClInclude Include="CTwofishPage.h" />
+    <ClInclude Include="C_3DES.h" />
     <ClInclude Include="C_AES.h" />
     <ClInclude Include="C_DES.h" />
     <ClInclude Include="C_RSA.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="CRSAPage.cpp" />
     <ClCompile Include="CSignVerifyPage.cpp" />
     <ClCompile Include="CTwofishPage.cpp" />
+    <ClCompile Include="C_3DES.cpp" />
     <ClCompile Include="C_AES.cpp" />
     <ClCompile Include="C_DES.cpp" />
     <ClCompile Include="C_RSA.cpp" />

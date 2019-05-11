@@ -54,9 +54,6 @@
     <ClInclude Include="CDESPage.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="C3DESPage.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CBlowfishPage.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -70,6 +67,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MyCEdit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="C_3DES.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="C3DESPage.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -101,9 +104,6 @@
     <ClCompile Include="CDESPage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="C3DESPage.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="CBlowfishPage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -120,6 +120,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MyCEdit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="C_3DES.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="C3DESPage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

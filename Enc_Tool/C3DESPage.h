@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include "MyCEdit.h"
 
 // C3DESPage 对话框
 
@@ -21,8 +21,17 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 private:
-	CComboBox m_enctype_cbox;
+	CString m_key;
+	CStatic m_ivText;
+	CEdit m_iv;
+	CComboBox m_EncType_cbox;
 	CComboBox m_padding_cbox;
+	MyCEdit m_Data;
+	MyCEdit m_EncData;
 public:
 	virtual BOOL OnInitDialog();
+	afx_msg void OnBnClickedButtonEnc();
+	afx_msg void OnBnClickedButtonDec();
+	afx_msg void OnBnClickedButtonImportdata();
+	afx_msg void OnBnClickedButtonImportencdata();
 };

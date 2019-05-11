@@ -11,8 +11,9 @@
 #define DIALOG_Blowfish                 108
 #define DIALOG_Twofish                  109
 #define DIALOG_3DES2                    110
-#define DIALOG_3DES                     110
 #define DIALOG_SignVerify               111
+#define DIALOG_DES1                     112
+#define DIALOG_3DES                     112
 #define IDR_MAINFRAME                   128
 #define IDC_TAB1                        1001
 #define IDC_EDIT1                       1002
@@ -60,6 +61,7 @@
 #define IDC_EDIT_iv                     1046
 #define IDC_BUTTON_ImportData2          1047
 #define IDC_BUTTON_ImportKey            1047
+#define IDC_IVText                      1047
 #define RSA_DIALOG                      57665
 #define DIALOG_RSA                      57665
 
@@ -69,7 +71,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        135
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1047
+#define _APS_NEXT_CONTROL_VALUE         1048
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

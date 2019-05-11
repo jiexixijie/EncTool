@@ -17,7 +17,6 @@ IMPLEMENT_DYNAMIC(CDESPage, CDialogEx)
 
 CDESPage::CDESPage(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(DIALOG_DES, pParent)
-	, m_iv(_T(""))
 	, m_key(_T(""))
 {
 
@@ -34,8 +33,9 @@ void CDESPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO_PaddingType, m_padding_cbox);
 	DDX_Control(pDX, IDC_EDIT_Data, m_Data);
 	DDX_Control(pDX, IDC_EDIT_EncData, m_EncData);
-	DDX_Text(pDX, IDC_EDIT_iv, m_iv);
 	DDX_Text(pDX, IDC_EDIT_Key, m_key);
+	DDX_Control(pDX, IDC_IVText, m_ivText);
+	DDX_Control(pDX, IDC_EDIT_iv, m_iv);
 }
 
 
@@ -44,6 +44,7 @@ BEGIN_MESSAGE_MAP(CDESPage, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_Dec, &CDESPage::OnBnClickedButtonDec)
 	ON_BN_CLICKED(IDC_BUTTON_ImportData, &CDESPage::OnBnClickedButtonImportdata)
 	ON_BN_CLICKED(IDC_BUTTON_ImportEncData, &CDESPage::OnBnClickedButtonImportencdata)
+	ON_CBN_SELCHANGE(IDC_COMBO_EncType, &CDESPage::OnCbnSelchangeComboEnctype)
 END_MESSAGE_MAP()
 
 
@@ -66,7 +67,7 @@ BOOL CDESPage::OnInitDialog()
 	//填充模式
 	m_padding_cbox.SetCurSel(0);
 	m_key = "11111111";
-	m_iv = "12345678";
+	m_iv.SetWindowTextW(_T("12345678"));
 	m_Data.SetWindowTextW(_T("Welcome"));
 	UpdateData(FALSE);
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -84,8 +85,14 @@ void CDESPage::OnBnClickedButtonEnc()
 		MessageBox(_T("密钥长度不能超过8Bytes"));
 		return;
 	}
+	if (m_key.IsEmpty()) {
+		MessageBox(_T("密钥不能为空"));
+		return;
+	}
 	//检查iv 不超过8字节
-	if (m_iv.GetLength() > 8) {
+	CString iv;
+	m_iv.GetWindowTextW(iv);
+	if (iv.GetLength() > 8) {
 		MessageBox(_T("iv长度不能超过8Bytes"));
 		return;
 	}
@@ -101,7 +108,7 @@ void CDESPage::OnBnClickedButtonEnc()
 	char key_c[8], iv_c[8];
 	memset(key_c, 0, 8);
 	memset(iv_c, 0, 8);
-	Get_Key_Vi_c(m_key, key_c, m_iv, iv_c);
+	Get_Key_Vi_c(m_key, key_c, iv, iv_c);
 	C_DES d;
 	//字符串加密 BASE64显示
 	if (!m_Data.IsFile()) {
@@ -183,8 +190,14 @@ void CDESPage::OnBnClickedButtonDec()
 		MessageBox(_T("密钥长度不能超过8Bytes"));
 		return;
 	}
+	if (m_key.IsEmpty()) {
+		MessageBox(_T("密钥不能为空"));
+		return;
+	}
 	//检查iv 不超过8字节
-	if (m_iv.GetLength() > 8) {
+	CString iv;
+	m_iv.GetWindowTextW(iv);
+	if (iv.GetLength() > 8) {
 		MessageBox(_T("iv长度不能超过8Bytes"));
 		return;
 	}
@@ -200,7 +213,7 @@ void CDESPage::OnBnClickedButtonDec()
 	char key_c[8], iv_c[8];
 	memset(key_c, 0, 8);
 	memset(iv_c, 0, 8);
-	Get_Key_Vi_c(m_key, key_c, m_iv, iv_c);
+	Get_Key_Vi_c(m_key, key_c, iv, iv_c);
 	C_DES d;
 	//字符串解密 BASE64显示
 	if (!m_EncData.IsFile()) {
@@ -301,3 +314,23 @@ void CDESPage::OnBnClickedButtonImportencdata()
 	}
 	UpdateData(FALSE);
 }
+
+
+void CDESPage::OnCbnSelchangeComboEnctype()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	//CFB，OFB不要偏移量
+	UpdateData(TRUE);
+	int index = m_enctype_cbox.GetCurSel();
+	if (index == 2 || index == 3) {
+		m_iv.ShowWindow(SW_HIDE);
+		m_ivText.ShowWindow(SW_HIDE);
+	}
+	else {
+		m_iv.ShowWindow(SW_SHOW);
+		m_ivText.ShowWindow(SW_SHOW);
+	}
+	UpdateData(FALSE);
+}
+
+

@@ -16,10 +16,6 @@ public:
 	int DecData(char* cipher, int cipherlen, char* msg, int& msglen, char* key, char* iv = NULL, int type = CBC);
 	int DecData(CString cipher, CString& msg, char* key_c, char* iv_c=NULL, int type=CBC);
 private:
-	//默认iv-算法向量
-	char* m_iv;
 	int error;
 };
 
-
-void Get_Key_Vi_c(CString key, char* key_c, CString iv, char* iv_c);

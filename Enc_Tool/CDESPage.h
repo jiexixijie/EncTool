@@ -30,11 +30,14 @@ private:
 private:
 	MyCEdit m_EncData;
 	MyCEdit m_Data;
-	CString m_iv;
+	CButton m_ivText;
+	CEdit m_iv;
 	CString m_key;
 public:
 	afx_msg void OnBnClickedButtonEnc();
 	afx_msg void OnBnClickedButtonDec();
 	afx_msg void OnBnClickedButtonImportdata();
 	afx_msg void OnBnClickedButtonImportencdata();
+
+	afx_msg void OnCbnSelchangeComboEnctype();
 };

@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "MyCEdit.h"
+
 
 // CAESPage 对话框
 
@@ -20,10 +22,23 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedButton1();
 private:
-	CComboBox m_enctype_cbox;
-	CComboBox m_paddingtype_cbox;
-	CComboBox m_blocksize_cbox;
+	MyCEdit m_Data;
+	MyCEdit m_EncData;
+	CComboBox m_paddding_cbox;
+	CComboBox m_EncType_cbox;
+	CString m_key;
+	CEdit m_iv;
+	CButton m_ivText;
 public:
 	virtual BOOL OnInitDialog();
+private:
+	CComboBox m_KeySize_cbox;
+public:
+	afx_msg void OnBnClickedButton2();
+	afx_msg void OnBnClickedButtonImportdata();
+	afx_msg void OnBnClickedButtonImportencdata();
+	afx_msg void OnCbnSelchangeCombo2();
 };

@@ -1,85 +1,38 @@
 #include "pch.h"
-#include "C_AES.h"
+#include "C_3DES.h"
 #include <iostream>
 
-C_AES::C_AES(){
-	error = Success;
-	KeySize = 128;
+C_3DES::C_3DES() {
+	error = 0;
 }
 
-C_AES::~C_AES()
-{
+C_3DES::~C_3DES() {
 }
-
-int C_AES::SetKeySize(int size) {
-	error = Success;
-	if (size != 128 && size != 192 && size != 256) {
-		error = WrongKeySize;
-	}
-	else {
-		KeySize = size;
-	}
-	return error;
-}
-
-int C_AES::EncData(char* msg, int msglen, char* cipher, int& cipherlen, char* key, char* iv, int type) {
+int C_3DES::EncData(char* msg, int msglen, char* cipher, int& cipherlen, char* key, char* iv, int type) {
 	error = Success;
 	EVP_CIPHER_CTX ctx;//EVP算法上下文
 	int ciphertmp;
 	//初始化密码算法结构体
 	EVP_CIPHER_CTX_init(&ctx);
 	//设置算法和密钥 PKCS padding
-	const EVP_CIPHER* ciphertype = EVP_aes_128_cbc();
+	const EVP_CIPHER* ciphertype = EVP_des_ede3_cbc();
 	if (type == ECB) {
-		if (KeySize == 192) {
-			ciphertype = EVP_aes_192_ecb();
-		}
-		else if (KeySize == 256) {
-			ciphertype = EVP_aes_256_ecb();
-		}
-		else {
-			ciphertype = EVP_aes_128_ecb();
-		}
+		ciphertype = EVP_des_ede3_ecb();
 	}
 	else if (type == CBC) {
-		if (KeySize == 192) {
-			ciphertype = EVP_aes_192_cbc();
-		}
-		else if (KeySize == 256) {
-			ciphertype = EVP_aes_256_cbc();
-		}
-		else {
-			ciphertype = EVP_aes_128_cbc();
-		}
+		ciphertype = EVP_des_ede3_cbc();
 	}
 	else if (type == CFB) {
-		if (KeySize == 192) {
-			ciphertype = EVP_aes_192_cfb();
-		}
-		else if (KeySize == 256) {
-			ciphertype = EVP_aes_256_cfb();
-		}
-		else {
-			ciphertype = EVP_aes_128_cfb();
-		};
+		ciphertype = EVP_des_ede3_cfb();
 	}
 	else if (type == OFB) {
-		if (KeySize == 192) {
-			ciphertype = EVP_aes_192_ofb();
-		}
-		else if (KeySize == 256) {
-			ciphertype = EVP_aes_256_ofb();
-		}
-		else {
-			ciphertype = EVP_aes_128_ofb();
-		};
+		ciphertype = EVP_des_ede3_ofb();
 	}
 	else {
 		error = WrongType;
 		return error;
 	}
-	if (EVP_EncryptInit_ex(&ctx, ciphertype, NULL, (unsigned char*)key, (unsigned char*)iv) != 1)
-	{
+	if (EVP_EncryptInit_ex(&ctx, ciphertype, NULL, (unsigned char*)key, (unsigned char*)iv) != 1) {
 		error = InitError;
 		return error;
 	}
@@ -98,64 +51,31 @@ int C_AES::EncData(char* msg, int msglen, char* cipher, int& cipherlen, char* ke
 	return error;
 }
 
-int C_AES::DecData(char* cipher, int cipherlen, char* msg, int& msglen, char* key, char* iv, int type) {
+int C_3DES::DecData(char* cipher, int cipherlen, char* msg, int& msglen, char* key, char* iv, int type) {
 	error = Success;
 	EVP_CIPHER_CTX ctx;//EVP算法上下文
 	int msgtmp;
 	//初始化密码算法结构体
 	EVP_CIPHER_CTX_init(&ctx);
 	//设置算法和密钥 
-	const EVP_CIPHER* ciphertype = EVP_aes_128_cbc();
+	const EVP_CIPHER* ciphertype = EVP_des_ede3_cbc();
 	if (type == ECB) {
-		if (KeySize == 192) {
-			ciphertype = EVP_aes_192_ecb();
-		}
-		else if (KeySize == 256) {
-			ciphertype = EVP_aes_256_ecb();
-		}
-		else {
-			ciphertype = EVP_aes_128_ecb();
-		}
+		ciphertype = EVP_des_ede3_ecb();
 	}
 	else if (type == CBC) {
-		if (KeySize == 192) {
-			ciphertype = EVP_aes_192_cbc();
-		}
-		else if (KeySize == 256) {
-			ciphertype = EVP_aes_256_cbc();
-		}
-		else {
-			ciphertype = EVP_aes_128_cbc();
-		}
+		ciphertype = EVP_des_ede3_cbc();
 	}
 	else if (type == CFB) {
-		if (KeySize == 192) {
-			ciphertype = EVP_aes_192_cfb();
-		}
-		else if (KeySize == 256) {
-			ciphertype = EVP_aes_256_cfb();
-		}
-		else {
-			ciphertype = EVP_aes_128_cfb();
-		};
+		ciphertype = EVP_des_ede3_cfb();
 	}
 	else if (type == OFB) {
-		if (KeySize == 192) {
-			ciphertype = EVP_aes_192_ofb();
-		}
-		else if (KeySize == 256) {
-			ciphertype = EVP_aes_256_ofb();
-		}
-		else {
-			ciphertype = EVP_aes_128_ofb();
-		};
+		ciphertype = EVP_des_ede3_ofb();
 	}
 	else {
 		error = WrongType;
 		return error;
 	}
-	if (EVP_DecryptInit_ex(&ctx, ciphertype, NULL, (unsigned char*)key, (unsigned char*)iv) != 1)
-	{
+	if (EVP_DecryptInit_ex(&ctx, ciphertype, NULL, (unsigned char*)key, (unsigned char*)iv) != 1) {
 		error = InitError;
 		return error;
 	}
@@ -174,18 +94,18 @@ int C_AES::DecData(char* cipher, int cipherlen, char* msg, int& msglen, char* ke
 	return error;
 }
 
-int C_AES::EncData(CString msg, CString& cipher, char* key_c, char* iv_c, int type) {
+int C_3DES::EncData(CString msg, CString& cipher, char* key_c, char* iv_c, int type) {
 	int msglen = WideCharToMultiByte(CP_ACP, 0, msg, msg.GetLength(), NULL, 0, NULL, NULL);
 	char* msg_c = new char[msglen + 1];
 	WideCharToMultiByte(CP_ACP, 0, msg, msg.GetLength(), msg_c, msglen, NULL, NULL);
 	msg_c[msglen] = '\0';
 	int cipherlen = 0;
 	int cipherbaselen = 0;
-	//16字节一组 加16防止有填充长度增加
-	char* cipher_c = new char[msglen + 16];
-	char* cipher_base = new char[msglen * 2 + 25]; //  /3*4+1
-	memset(cipher_base, 0, msglen * 2 + 25);
-	memset(cipher_c, 0, msglen + 16);
+	//8字节一组 加8防止有填充长度增加
+	char* cipher_c = new char[msglen + 8];
+	char* cipher_base = new char[msglen * 2 + 12]; //  /3*4+1
+	memset(cipher_base, 0, msglen * 2 + 12);
+	memset(cipher_c, 0, msglen + 8);
 	if (EncData(msg_c, msglen, cipher_c, cipherlen, key_c, iv_c, type) != Success) {
 		delete[]msg_c;
 		delete[]cipher_c;
@@ -201,7 +121,9 @@ int C_AES::EncData(CString msg, CString& cipher, char* key_c, char* iv_c, int ty
 	return Success;
 }
 
-int C_AES::DecData(CString cipher, CString& msg, char* key_c, char* iv_c, int type) {
+
+int C_3DES::DecData(CString cipher, CString& msg, char* key_c, char* iv_c, int type) {
+	int a = cipher.GetLength();
 	int cipherlen = WideCharToMultiByte(CP_ACP, 0, cipher, cipher.GetLength(), NULL, 0, NULL, NULL);
 	char* cipher_c = new char[cipherlen + 1];
 	WideCharToMultiByte(CP_ACP, 0, cipher, cipher.GetLength(), cipher_c, cipherlen, NULL, NULL);
@@ -229,3 +151,4 @@ int C_AES::DecData(CString cipher, CString& msg, char* key_c, char* iv_c, int ty
 	delete[]msg_c;
 	return Success;
 }
+

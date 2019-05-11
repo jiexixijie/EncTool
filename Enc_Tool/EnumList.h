@@ -8,7 +8,7 @@ enum Error {
 	VerifyFail,SignFail,
 	WrongType, DataBigError,
 	KeyError,
-	WrongBlockSize,
+	WrongKeySize,
 	Success = 0,
 };
 
@@ -42,3 +42,5 @@ CString FileDlg_GetSavePath();
 CString TransData(CString A, int type);
 
 int WriteCstringFileWC_MB(char* filename, CString data);
+
+void Get_Key_Vi_c(CString key, char* key_c, CString iv, char* iv_c);
