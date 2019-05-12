@@ -57,6 +57,9 @@ CEncToolDlg::CEncToolDlg(CWnd* pParent /*=nullptr*/)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_CurSelTab = 0;
+	for (int i = 0; i < 10; i++) {
+		pages[i] = NULL;
+	}
 }
 
 void CEncToolDlg::DoDataExchange(CDataExchange* pDX)
@@ -112,16 +115,21 @@ BOOL CEncToolDlg::OnInitDialog()
 	m_tab.InsertItem(2, _T("3DES"));
 	m_tab.InsertItem(3, _T("AES"));
 	m_tab.InsertItem(4, _T("Blowfish"));
-	m_tab.InsertItem(5, _T("Twofish"));
-	m_tab.InsertItem(6, _T("Sign/Verify"));
+	m_tab.InsertItem(5, _T("RC4"));
+	m_tab.InsertItem(6, _T("Hash"));
+	m_tab.InsertItem(7, _T("Sign/Verify"));
+	m_tab.InsertItem(8, _T("Other"));
+
 
 	RSApage.Create(DIALOG_RSA, &m_tab); pages[PageNums++] = &RSApage;
 	DESpage.Create(DIALOG_DES, &m_tab); pages[PageNums++] = &DESpage;
 	DES3page.Create(DIALOG_3DES, &m_tab); pages[PageNums++] = &DES3page;
 	AESpage.Create(DIALOG_AES, &m_tab); pages[PageNums++] = &AESpage;
 	Blowfishpage.Create(DIALOG_Blowfish, &m_tab); pages[PageNums++] = &Blowfishpage;
-	Twofishpage.Create(DIALOG_Twofish, &m_tab); pages[PageNums++] = &Twofishpage;
+	RC4page.Create(DIALOG_RC4, &m_tab); pages[PageNums++] = &RC4page;
+	Hashpage.Create(DIALOG_Hash, &m_tab); pages[PageNums++] = &Hashpage;
 	SignVerifypage.Create(DIALOG_SignVerify, &m_tab); pages[PageNums++] = &SignVerifypage;
+	Otherpage.Create(DIALOG_Other, &m_tab); pages[PageNums++] = &Otherpage;
 
 	CRect rc;
 	m_tab.GetClientRect(rc); //获得m_tab对话框尺寸

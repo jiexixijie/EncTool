@@ -14,6 +14,9 @@
 #define DIALOG_SignVerify               111
 #define DIALOG_DES1                     112
 #define DIALOG_3DES                     112
+#define DIALOG_Hash                     113
+#define DIALOG_Other                    114
+#define DIALOG_RC4                      115
 #define IDR_MAINFRAME                   128
 #define IDC_TAB1                        1001
 #define IDC_EDIT1                       1002
@@ -31,7 +34,9 @@
 #define IDC_COMBO5                      1013
 #define IDC_BUTTON13                    1013
 #define IDC_BUTTON3                     1014
+#define IDC_EDIT7                       1014
 #define IDC_BUTTON4                     1015
+#define IDC_EDIT8                       1015
 #define IDC_BUTTON5                     1016
 #define IDC_BUTTON6                     1017
 #define IDC_BUTTON11                    1018
@@ -62,6 +67,9 @@
 #define IDC_BUTTON_ImportData2          1047
 #define IDC_BUTTON_ImportKey            1047
 #define IDC_IVText                      1047
+#define IDC_RADIO1                      1048
+#define IDC_RADIO2                      1049
+#define IDC_RADIO3                      1050
 #define RSA_DIALOG                      57665
 #define DIALOG_RSA                      57665
 
@@ -71,7 +79,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        135
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1048
+#define _APS_NEXT_CONTROL_VALUE         1051
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

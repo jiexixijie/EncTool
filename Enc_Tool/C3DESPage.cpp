@@ -43,6 +43,7 @@ BEGIN_MESSAGE_MAP(C3DESPage, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_Dec, &C3DESPage::OnBnClickedButtonDec)
 	ON_BN_CLICKED(IDC_BUTTON_ImportData, &C3DESPage::OnBnClickedButtonImportdata)
 	ON_BN_CLICKED(IDC_BUTTON_ImportEncData, &C3DESPage::OnBnClickedButtonImportencdata)
+	ON_CBN_SELCHANGE(IDC_COMBO_EncType, &C3DESPage::OnCbnSelchangeComboEnctype)
 END_MESSAGE_MAP()
 
 
@@ -301,6 +302,23 @@ void C3DESPage::OnBnClickedButtonImportencdata()
 	if (OpenFileDlg.DoModal() == IDOK) {
 		//记录文件名
 		m_EncData.showFileHexData(OpenFileDlg.GetPathName());
+	}
+	UpdateData(FALSE);
+}
+
+
+void C3DESPage::OnCbnSelchangeComboEnctype()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	UpdateData(TRUE);
+	int index = m_EncType_cbox.GetCurSel();
+	if (index == 2 || index == 3) {
+		m_iv.ShowWindow(SW_HIDE);
+		m_ivText.ShowWindow(SW_HIDE);
+	}
+	else {
+		m_iv.ShowWindow(SW_SHOW);
+		m_ivText.ShowWindow(SW_SHOW);
 	}
 	UpdateData(FALSE);
 }

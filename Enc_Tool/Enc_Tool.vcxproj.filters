@@ -54,16 +54,10 @@
     <ClInclude Include="CDESPage.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CBlowfishPage.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CTwofishPage.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CSignVerifyPage.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="C_TwoBlowfish.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MyCEdit.h">
@@ -73,6 +67,27 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="C3DESPage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Blowfish.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CBlowfishPage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COtherPage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="C_RC4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRC4Page.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CHashPage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Hash.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -104,16 +119,10 @@
     <ClCompile Include="CDESPage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CBlowfishPage.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="CTwofishPage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CSignVerifyPage.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="C_TwoBlowfish.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="EnumList.cpp">
@@ -126,6 +135,27 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="C3DESPage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Blowfish.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CBlowfishPage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="COtherPage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="C_RC4.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CRC4Page.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CHashPage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Hash.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

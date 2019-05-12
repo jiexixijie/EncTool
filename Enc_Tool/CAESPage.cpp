@@ -232,7 +232,6 @@ void CAESPage::OnBnClickedButton2()
 		int Readsize = 1024;
 		int DecDatalen = 0;
 		//每1024字节一个循环 解密文件
-		C_AES a;
 		while (Readsize < filesize) {
 			fileR.Read(filedata, 1024);
 			if (a.DecData(filedata, 1024, DecData, DecDatalen, key_c, iv_c, AES_TYPE_List[m_EncType_cbox.GetCurSel()]) != Success) {

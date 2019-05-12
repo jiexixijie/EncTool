@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include "MyCEdit.h"
 
 // CBlowfishPage 对话框
 
@@ -20,9 +20,19 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
-public:
-	virtual BOOL OnInitDialog();
 private:
-	CComboBox m_enctype_cbox;
+	CString m_key;
+	CStatic m_ivText;
+	CEdit m_iv;
 	CComboBox m_padding_cbox;
+	CComboBox m_EncType_cbox;
+	MyCEdit m_Data;
+	MyCEdit m_EncData;
+public:
+	afx_msg void OnBnClickedButtonEnc();
+	virtual BOOL OnInitDialog();
+	afx_msg void OnBnClickedButtonDec();
+	afx_msg void OnBnClickedButtonImportdata();
+	afx_msg void OnBnClickedButtonImportencdata();
+	afx_msg void OnCbnSelchangeComboEnctype();
 };

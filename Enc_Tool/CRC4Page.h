@@ -1,19 +1,19 @@
 ﻿#pragma once
 #include "MyCEdit.h"
 
-// C3DESPage 对话框
+// CRC4Page 对话框
 
-class C3DESPage : public CDialogEx
+class CRC4Page : public CDialogEx
 {
-	DECLARE_DYNAMIC(C3DESPage)
+	DECLARE_DYNAMIC(CRC4Page)
 
 public:
-	C3DESPage(CWnd* pParent = nullptr);   // 标准构造函数
-	virtual ~C3DESPage();
+	CRC4Page(CWnd* pParent = nullptr);   // 标准构造函数
+	virtual ~CRC4Page();
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = DIALOG_3DES };
+	enum { IDD = DIALOG_RC4 };
 #endif
 
 protected:
@@ -22,17 +22,12 @@ protected:
 	DECLARE_MESSAGE_MAP()
 private:
 	CString m_key;
-	CStatic m_ivText;
-	CEdit m_iv;
-	CComboBox m_EncType_cbox;
-	CComboBox m_padding_cbox;
 	MyCEdit m_Data;
 	MyCEdit m_EncData;
 public:
-	virtual BOOL OnInitDialog();
 	afx_msg void OnBnClickedButtonEnc();
 	afx_msg void OnBnClickedButtonDec();
-	afx_msg void OnBnClickedButtonImportdata();
+	virtual BOOL OnInitDialog();
 	afx_msg void OnBnClickedButtonImportencdata();
-	afx_msg void OnCbnSelchangeComboEnctype();
+	afx_msg void OnBnClickedButtonImportdata();
 };

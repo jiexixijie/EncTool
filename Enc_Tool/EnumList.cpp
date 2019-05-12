@@ -169,3 +169,13 @@ void Get_Key_Vi_c(CString key, char* key_c, CString iv, char* iv_c) {
 	int ivlen = WideCharToMultiByte(CP_ACP, 0, iv, iv.GetLength(), NULL, 0, NULL, NULL);
 	WideCharToMultiByte(CP_ACP, 0, iv, iv.GetLength(), iv_c, ivlen, NULL, NULL);
 }
+
+CString Data_To_HexCString(BYTE* data, int datalen) {
+	CString data_Hex(_T(""));
+	CString temp;
+	for (int i = 0; i < datalen; i++) {
+		temp.Format(_T("%02X"), data[i]);
+		data_Hex += temp;
+	}
+	return data_Hex;
+}

@@ -1,94 +1,60 @@
-﻿// CBlowfishPage.cpp: 实现文件
+﻿// CRC4Page.cpp: 实现文件
 //
 
 #include "pch.h"
 #include "Enc_Tool.h"
-#include "CBlowfishPage.h"
+#include "CRC4Page.h"
 #include "afxdialogex.h"
-#include "C_Blowfish.h"
-#include <openssl/evp.h>
+#include "C_RC4.h"
 
+// CRC4Page 对话框
 
-int Blowfish_TYPE_List[] = { CBC,ECB, OFB, CFB };
-// CBlowfishPage 对话框
+IMPLEMENT_DYNAMIC(CRC4Page, CDialogEx)
 
-IMPLEMENT_DYNAMIC(CBlowfishPage, CDialogEx)
-
-CBlowfishPage::CBlowfishPage(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(DIALOG_Blowfish, pParent)
+CRC4Page::CRC4Page(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(DIALOG_RC4, pParent)
 	, m_key(_T(""))
 {
 
 }
 
-CBlowfishPage::~CBlowfishPage()
+CRC4Page::~CRC4Page()
 {
 }
 
-void CBlowfishPage::DoDataExchange(CDataExchange* pDX)
+void CRC4Page::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT_Key, m_key);
-	DDX_Control(pDX, IDC_IVText, m_ivText);
-	DDX_Control(pDX, IDC_EDIT_iv, m_iv);
-	DDX_Control(pDX, IDC_COMBO_PaddingType, m_padding_cbox);
-	DDX_Control(pDX, IDC_COMBO_EncType, m_EncType_cbox);
 	DDX_Control(pDX, IDC_EDIT_Data, m_Data);
 	DDX_Control(pDX, IDC_EDIT_EncData, m_EncData);
 }
 
 
-BEGIN_MESSAGE_MAP(CBlowfishPage, CDialogEx)
-	ON_BN_CLICKED(IDC_BUTTON_Enc, &CBlowfishPage::OnBnClickedButtonEnc)
-	ON_BN_CLICKED(IDC_BUTTON_Dec, &CBlowfishPage::OnBnClickedButtonDec)
-	ON_BN_CLICKED(IDC_BUTTON_ImportData, &CBlowfishPage::OnBnClickedButtonImportdata)
-	ON_BN_CLICKED(IDC_BUTTON_ImportEncData, &CBlowfishPage::OnBnClickedButtonImportencdata)
-	ON_CBN_SELCHANGE(IDC_COMBO_EncType, &CBlowfishPage::OnCbnSelchangeComboEnctype)
+BEGIN_MESSAGE_MAP(CRC4Page, CDialogEx)
+	ON_BN_CLICKED(IDC_BUTTON_Enc, &CRC4Page::OnBnClickedButtonEnc)
+	ON_BN_CLICKED(IDC_BUTTON_Dec, &CRC4Page::OnBnClickedButtonDec)
+	ON_BN_CLICKED(IDC_BUTTON_ImportEncData, &CRC4Page::OnBnClickedButtonImportencdata)
+	ON_BN_CLICKED(IDC_BUTTON_ImportData, &CRC4Page::OnBnClickedButtonImportdata)
 END_MESSAGE_MAP()
 
 
-// CBlowfishPage 消息处理程序
+// CRC4Page 消息处理程序
 
 
-BOOL CBlowfishPage::OnInitDialog()
-{
-	CDialogEx::OnInitDialog();
-
-	// TODO:  在此添加额外的初始化
-	m_EncType_cbox.SetCurSel(0);
-	//填充模式
-	m_padding_cbox.SetCurSel(0);
-	m_key = "1111";
-	m_iv.SetWindowTextW(_T("12345678"));
-	m_Data.SetWindowTextW(_T("Welcome"));
-	UpdateData(FALSE);
-
-	return TRUE;  // return TRUE unless you set the focus to a control
-				  // 异常: OCX 属性页应返回 FALSE
-}
-
-
-
-void CBlowfishPage::OnBnClickedButtonEnc()
+void CRC4Page::OnBnClickedButtonEnc()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	//加密
-	//加密 
-	//检查密钥长度不超过8字节
 	UpdateData(TRUE);
-	if (m_key.GetLength() < 4 || m_key.GetLength() > 56) {
-		MessageBox(_T("密钥长度应为32bits-448bits"));
-		return;
-	}
 	if (m_key.IsEmpty()) {
 		MessageBox(_T("密钥不能为空"));
 		return;
 	}
-	//检查iv 不超过8字节
-	CString iv;
-	m_iv.GetWindowTextW(iv);
-	if (iv.GetLength() > 8) {
-		MessageBox(_T("iv长度不能超过8Bytes"));
+	if (m_key.GetLength() < 5 || m_key.GetLength() > 256) {
+		CString msg;
+		msg.Format(_T("密钥长度请在5Bytes-256Bytes"));
+		MessageBox(msg);
 		return;
 	}
 	//判断明文不为空
@@ -98,19 +64,18 @@ void CBlowfishPage::OnBnClickedButtonEnc()
 		MessageBox(_T("请输入待加密数据"));
 		return;
 	}
-	//将key和iv转化为char 同时如果不足8字符用'\0'末尾进行补充
-	//同时若iv为空则设置为NULL 使用C_DES 默认iv:12345678
-	char key_c[56], iv_c[8];
-	memset(key_c, 0, 56);
-	memset(iv_c, 0, 8);
-	Get_Key_Vi_c(m_key, key_c, iv, iv_c);
-	C_Blowfish b;
+	//将key为char 同时如果不足 用'\0'末尾进行补充
+	char key_c[256];
+	memset(key_c, 0, 256);
+	int keylen = WideCharToMultiByte(CP_ACP, 0, m_key, m_key.GetLength(), NULL, 0, NULL, NULL);
+	WideCharToMultiByte(CP_ACP, 0, m_key, m_key.GetLength(), key_c, keylen, NULL, NULL);
+	C_RC4 rc;
 	//字符串加密 BASE64显示
 	if (!m_Data.IsFile()) {
 		CString EncData;
 		//windows换行符为'/r/n' 转换为'/n'
 		Data = TransData(Data, 1);
-		if (b.EncData(Data, EncData, key_c, iv_c, Blowfish_TYPE_List[m_EncType_cbox.GetCurSel()]) != Success) {
+		if (rc.EncData(Data, EncData, key_c, keylen) != Success) {
 			MessageBox(_T("加密失败"));
 		}
 		else {
@@ -142,7 +107,7 @@ void CBlowfishPage::OnBnClickedButtonEnc()
 		//每1024字节一个循环 加密文件
 		while (Readsize < filesize) {
 			fileR.Read(filedata, 1024);
-			if (b.EncData(filedata, 1024, CipherData, cipherlen, key_c, iv_c, Blowfish_TYPE_List[m_EncType_cbox.GetCurSel()]) != Success) {
+			if (rc.EncData(filedata, 1024, CipherData, cipherlen, key_c, keylen) != Success) {
 				MessageBox(_T("加密失败"));
 				m_EncData.SetWindowTextW(_T(""));
 				fileR.Close();
@@ -157,7 +122,7 @@ void CBlowfishPage::OnBnClickedButtonEnc()
 			memset(filedata, 0, sizeof(char) * 1024);
 			memset(CipherData, 0, sizeof(char) * 1024);
 			fileR.Read(filedata, filesize);
-			if (b.EncData(filedata, filesize, CipherData, cipherlen, key_c, iv_c, Blowfish_TYPE_List[m_EncType_cbox.GetCurSel()]) != Success) {
+			if (rc.EncData(filedata, filesize, CipherData, cipherlen, key_c, keylen) != Success) {
 				MessageBox(_T("加密失败"));
 				m_EncData.SetWindowTextW(_T(""));
 				fileR.Close();
@@ -172,53 +137,44 @@ void CBlowfishPage::OnBnClickedButtonEnc()
 		m_EncData.showFileHexData(FileW_path);
 	}
 	UpdateData(FALSE);
-
 }
 
 
-void CBlowfishPage::OnBnClickedButtonDec()
+void CRC4Page::OnBnClickedButtonDec()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData(TRUE);
-	if (m_key.GetLength() < 4 || m_key.GetLength() > 56) {
-		MessageBox(_T("密钥长度应为32bits-448bits"));
-		return;
-	}
 	if (m_key.IsEmpty()) {
 		MessageBox(_T("密钥不能为空"));
 		return;
 	}
-	//检查iv 不超过8字节
-	CString iv;
-	m_iv.GetWindowTextW(iv);
-	if (iv.GetLength() > 8) {
-		MessageBox(_T("iv长度不能超过8Bytes"));
+	if (m_key.GetLength() < 5 || m_key.GetLength() > 256) {
+		CString msg;
+		msg.Format(_T("密钥长度请在5Bytes-256Bytes"));
+		MessageBox(msg);
 		return;
 	}
 	//判断密文不为空
 	CString EncData;
 	m_EncData.GetWindowTextW(EncData);
 	if (EncData.IsEmpty()) {
-		MessageBox(_T("请输入待解密密文"));
+		MessageBox(_T("请输入待加密数据"));
 		return;
 	}
-	//将key和iv转化为char 同时如果不足8字符用'\0'末尾进行补充
-	//同时若iv为空则设置为NULL 使用C_DES 默认iv:12345678
-	char key_c[56], iv_c[8];
-	memset(key_c, 0, 56);
-	memset(iv_c, 0, 8);
-	Get_Key_Vi_c(m_key, key_c, iv, iv_c);
-	C_Blowfish b;
+	//将key为char 同时如果不足 用'\0'末尾进行补充
+	char key_c[256];
+	memset(key_c, 0, 256);
+	int keylen = WideCharToMultiByte(CP_ACP, 0, m_key, m_key.GetLength(), NULL, 0, NULL, NULL);
+	WideCharToMultiByte(CP_ACP, 0, m_key, m_key.GetLength(), key_c, keylen, NULL, NULL);
+	C_RC4 rc;
 	//字符串解密 BASE64显示
 	if (!m_EncData.IsFile()) {
 		CString Data;
-		if (b.DecData(EncData, Data, key_c, iv_c, Blowfish_TYPE_List[m_EncType_cbox.GetCurSel()]) != Success) {
+		if (rc.DecData(EncData, Data, key_c, keylen) != Success) {
 			MessageBox(_T("解密失败"));
 		}
-		else {
-			Data = TransData(Data, 0);
-			m_Data.SetWindowTextW(Data);
-		}
+		Data = TransData(Data, 0);
+		m_Data.SetWindowTextW(Data);
 	}
 	else {
 		CFile fileR, fileW;
@@ -244,7 +200,7 @@ void CBlowfishPage::OnBnClickedButtonDec()
 		//每1024字节一个循环 解密文件
 		while (Readsize < filesize) {
 			fileR.Read(filedata, 1024);
-			if (b.DecData(filedata, 1024, DecData, DecDatalen, key_c, iv_c, Blowfish_TYPE_List[m_EncType_cbox.GetCurSel()]) != Success) {
+			if (rc.DecData(filedata, 1024, DecData, DecDatalen, key_c,keylen) != Success) {
 				MessageBox(_T("解密失败"));
 				m_Data.SetWindowTextW(_T(""));
 				fileR.Close();
@@ -259,7 +215,7 @@ void CBlowfishPage::OnBnClickedButtonDec()
 			memset(filedata, 0, sizeof(char) * 1024);
 			memset(DecData, 0, sizeof(char) * 1024);
 			fileR.Read(filedata, filesize);
-			if (b.DecData(filedata, filesize, DecData, DecDatalen, key_c, iv_c, Blowfish_TYPE_List[m_EncType_cbox.GetCurSel()]) != Success) {
+			if (rc.DecData(filedata, filesize, DecData, DecDatalen, key_c, keylen) != Success) {
 				MessageBox(_T("解密失败"));
 				m_Data.SetWindowTextW(_T(""));
 				fileR.Close();
@@ -274,27 +230,23 @@ void CBlowfishPage::OnBnClickedButtonDec()
 		m_Data.showFileData(FileW_path);
 	}
 	UpdateData(FALSE);
-
 }
 
 
-void CBlowfishPage::OnBnClickedButtonImportdata()
+BOOL CRC4Page::OnInitDialog()
 {
-	// TODO: 在此添加控件通知处理程序代码
-	UpdateData(TRUE);
-	BOOL isOpen = TRUE;
-	CString filename;
-	CString filter = _T("All Files|*||");
-	CFileDialog OpenFileDlg(isOpen, NULL, filename, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST, filter, NULL);
-	if (OpenFileDlg.DoModal() == IDOK) {
-		//记录文件名
-		m_Data.showFileHexData(OpenFileDlg.GetPathName());
-	}
+	CDialogEx::OnInitDialog();
+
+	// TODO:  在此添加额外的初始化
+	m_Data.SetWindowTextW(_T("Welcome"));
+	m_key.Format(_T("12345"));
 	UpdateData(FALSE);
+	return TRUE;  // return TRUE unless you set the focus to a control
+				  // 异常: OCX 属性页应返回 FALSE
 }
 
 
-void CBlowfishPage::OnBnClickedButtonImportencdata()
+void CRC4Page::OnBnClickedButtonImportencdata()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData(TRUE);
@@ -310,18 +262,17 @@ void CBlowfishPage::OnBnClickedButtonImportencdata()
 }
 
 
-void CBlowfishPage::OnCbnSelchangeComboEnctype()
+void CRC4Page::OnBnClickedButtonImportdata()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData(TRUE);
-	int index = m_EncType_cbox.GetCurSel();
-	if (index == 2 || index == 3) {
-		m_iv.ShowWindow(SW_HIDE);
-		m_ivText.ShowWindow(SW_HIDE);
-	}
-	else {
-		m_iv.ShowWindow(SW_SHOW);
-		m_ivText.ShowWindow(SW_SHOW);
+	BOOL isOpen = TRUE;
+	CString filename;
+	CString filter = _T("All Files|*||");
+	CFileDialog OpenFileDlg(isOpen, NULL, filename, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST, filter, NULL);
+	if (OpenFileDlg.DoModal() == IDOK) {
+		//记录文件名
+		m_Data.showFileHexData(OpenFileDlg.GetPathName());
 	}
 	UpdateData(FALSE);
 }

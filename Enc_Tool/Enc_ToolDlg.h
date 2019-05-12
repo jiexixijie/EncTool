@@ -8,7 +8,9 @@
 #include "CDESPage.h"
 #include "C3DESPage.h"
 #include "CBlowfishPage.h"
-#include "CTwofishPage.h"
+#include "CRC4Page.h"
+#include "CHashPage.h"
+#include "COtherPage.h"
 #include "CSignVerifyPage.h"
 // CEncToolDlg 对话框
 class CEncToolDlg : public CDialogEx
@@ -43,8 +45,10 @@ private:
 	CDESPage DESpage;
 	C3DESPage DES3page;
 	CBlowfishPage Blowfishpage;
-	CTwofishPage Twofishpage;
+	CRC4Page RC4page;
+	CHashPage Hashpage;
 	CSignVerifyPage SignVerifypage;
+	COtherPage Otherpage;
 	//保存页面 方便进行显示和隐藏
 	CDialog* pages[10];
 	int m_CurSelTab;

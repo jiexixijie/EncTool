@@ -26,6 +26,7 @@ enum CertType {
 enum MDtype {
 	Type_MD5, Type_SHA1, Type_SHA256
 };
+
 enum RSA_Pri_Pub_Dec_Enc {
 	RSA_Pri_Enc, RSA_Pri_Dec, RSA_Pub_Enc, RSA_Pub_Dec,
 };
@@ -44,3 +45,5 @@ CString TransData(CString A, int type);
 int WriteCstringFileWC_MB(char* filename, CString data);
 
 void Get_Key_Vi_c(CString key, char* key_c, CString iv, char* iv_c);
+
+CString Data_To_HexCString(BYTE* data,int datalen);
