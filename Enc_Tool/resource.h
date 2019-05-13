@@ -11,12 +11,12 @@
 #define DIALOG_Blowfish                 108
 #define DIALOG_Twofish                  109
 #define DIALOG_3DES2                    110
-#define DIALOG_SignVerify               111
 #define DIALOG_DES1                     112
 #define DIALOG_3DES                     112
 #define DIALOG_Hash                     113
 #define DIALOG_Other                    114
 #define DIALOG_RC4                      115
+#define DIALOG_SignVerify               116
 #define IDR_MAINFRAME                   128
 #define IDC_TAB1                        1001
 #define IDC_EDIT1                       1002
@@ -56,6 +56,7 @@
 #define IDC_EDIT_eValue                 1036
 #define IDC_COMBO_PaddingType           1037
 #define IDC_BUTTON_ImportData           1038
+#define IDC_COMBO_HashType              1038
 #define IDC_BUTTON_ExportData           1039
 #define IDC_BUTTON_ImportEncData        1040
 #define IDC_BUTTON_ExportEncData        1041

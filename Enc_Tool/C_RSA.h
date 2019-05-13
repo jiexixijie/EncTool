@@ -43,10 +43,12 @@ public:
 	//私钥签名 哈希方式:MD5, SHA1, SHA256
 	//data:消息内容 sign:存放待签名的缓冲区
 	//返回sign内容和长度 需要先ReadPriKey() 或 GenerateKey()
-	int Pri_Sign(char* data, int datalen, char* sign, unsigned int& signlen, int mdtype = Type_MD5);
+	int Pri_Sign(char* data, int datalen, char* sign, int &signlen, int mdtype = Type_MD5);
+	int Pri_Sign(CString data, CString &sign, int mdtype = Type_MD5);
 	//公钥验证  
 	//data:消息内容 sign:签名值 进行验证
 	int Pub_Verfiy(char* data, int datalen, char* sign, unsigned int signlen, int mdtype = Type_MD5);
+	int Pub_Verfiy(CString data, CString sign, int mdtype = Type_MD5);
 private:
 	RSA *Pub;
 	RSA* Pri;

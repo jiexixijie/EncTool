@@ -84,6 +84,7 @@ BOOL CRSAPage::OnInitDialog()
 	m_encpwdStext.ShowWindow(SW_HIDE);
 	m_Data.SetWindowTextW(_T("Welcome"));
 	UpdateData(FALSE);
+	OnBnClickedButtonGenkey();
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
 }
@@ -337,7 +338,7 @@ void CRSAPage::OnBnClickedButtonPubDec()
 	if (!m_EncData.IsFile()) {
 		CString data;
 		if (r.DealData(Encdata, data, RSA_Pub_Dec, padding) < 0) {
-			MessageBox(_T("加密错误"));
+			MessageBox(_T("解密错误"));
 			return;
 		}
 		//显示解密后数据
@@ -401,7 +402,7 @@ void CRSAPage::OnBnClickedButtonPriDec()
 		//私钥加密格式
 		CString data;
 		if (r.DealData(Encdata, data, RSA_Pri_Dec, padding) < 0) {
-			MessageBox(_T("加密错误"));
+			MessageBox(_T("解密错误"));
 			return;
 		}
 		m_Data.SetWindowTextW(data);

@@ -468,7 +468,7 @@ DEAL_:
 	}
 	return error;
 }
-int C_RSA::Pri_Sign(char* data, int datalen, char* sign, unsigned int& signlen,int mdtype) {
+int C_RSA::Pri_Sign(char* data, int datalen, char* sign, int& signlen,int mdtype) {
 	error = Success;
 	EVP_MD_CTX md_ctx;
 	EVP_MD_CTX_init(&md_ctx);
@@ -495,12 +495,16 @@ int C_RSA::Pri_Sign(char* data, int datalen, char* sign, unsigned int& signlen,i
 		goto sign_end;
 	}
 	//签名 对摘要进行加密
-	if (EVP_SignFinal(&md_ctx, (unsigned char*)sign, (unsigned int*)signlen, pkey) != 1) {
+	int signdata_len = 0;
+	if (EVP_SignFinal(&md_ctx, (unsigned char*)sign,(unsigned int*)&signdata_len, pkey) != 1) {
 		error = SignFail;
 		goto sign_end;
 	}
+	//bits转Bytes
+	signlen = signdata_len;
 sign_end:
 	EVP_MD_CTX_cleanup(&md_ctx);
+	//EVP_PKEY_free(pkey);
 	return error;
 }
 
@@ -536,6 +540,7 @@ int C_RSA::Pub_Verfiy(char* data, int datalen, char* sign, unsigned int signlen,
 		goto verify_end;
 	}
 verify_end:
+	//正确
 	EVP_MD_CTX_cleanup(&md_ctx);
 	return error;
 }
@@ -613,4 +618,56 @@ DEAL_:
 		error = Success;
 	}
 	return error;
+}
+
+
+int C_RSA::Pri_Sign(CString data, CString &sign, int mdtype) {
+	int len = 0;
+	//500字节足够用于保存1024bit 甚至是2048bit
+	//先将输入明文的Cstring转换为char类型
+	char sign_c[500], sign_Base64[500];
+	memset(sign_c, 0, 500);
+	memset(sign_Base64, 0, 500);
+	int datalen = WideCharToMultiByte(CP_ACP, 0, data, data.GetLength(), NULL, 0, NULL, NULL);
+	char* data_c = new char[datalen + 1];
+	memset(data_c, 0, datalen + 1);
+	if (data_c == NULL) {
+		AfxMessageBox(_T("申请内存失败"));
+		return InitError;
+	}
+	WideCharToMultiByte(CP_ACP, 0, data, data.GetLength(), (char*)data_c, datalen, NULL, NULL);
+	int signlen = 0;
+	//2048/8=
+	//500字节足够存放hash后的再加密数值
+	if (Pri_Sign(data_c, datalen, sign_c, signlen, mdtype) != Success) {
+		delete[]data_c;
+		return EVPHashError;
+	}
+	EncBase64(sign_c, signlen, sign_Base64, signlen);
+	sign = sign_Base64;
+	delete[]data_c;
+	return Success;
+}
+
+int C_RSA::Pub_Verfiy(CString data, CString sign, int mdtype) {
+	int len = 0;
+	//500字节足够用于保存1024bit 甚至是2048bit
+	//先将输入明文的Cstring转换为char类型
+	int datalen = WideCharToMultiByte(CP_ACP, 0, data, data.GetLength(), NULL, 0, NULL, NULL);
+	char* data_c = new char[datalen + 1];
+	char sign_c[500];
+	memset(sign_c, 0, 500);
+	if (data_c == NULL) {
+		AfxMessageBox(_T("申请内存失败"));
+		return InitError;
+	}
+	WideCharToMultiByte(CP_ACP, 0, data, data.GetLength(), (char*)data_c, datalen, NULL, NULL);
+	data_c[datalen] = '\0';
+	int signlen = 0;
+	if (Pub_Verfiy(data_c, datalen, sign_c, signlen, mdtype) != Success) {
+		delete[]data_c;
+		return VerifyFail;
+	}
+	delete[]data_c;
+	return Success;
 }
