@@ -30,6 +30,10 @@ enum MDtype {
 enum RSA_Pri_Pub_Dec_Enc {
 	RSA_Pri_Enc, RSA_Pri_Dec, RSA_Pub_Enc, RSA_Pub_Dec,
 };
+
+enum FileEncType {
+	Enc_AES,Enc_DES,Enc_RC4,
+};
 //BASE64编码 Base64编码后长度为原长的 len/3 * 4 + 0/1/2
 void EncBase64(char* charBuf, int charBufLen, char* base64Char, int& base64CharLen);      
 //BASE64解码

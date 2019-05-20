@@ -21,6 +21,7 @@ public:
 	//保存内容  直接保存到内容
 	void SaveFileData(CString filePath);
 	bool IsFile();
+	void EmptyFile();
 	CString FilePath;
 protected:
 	DECLARE_MESSAGE_MAP()

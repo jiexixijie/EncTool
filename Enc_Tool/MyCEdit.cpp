@@ -171,3 +171,9 @@ void  MyCEdit::showHexData(char* Data, ULONGLONG datalen) {
 		this->SetWindowTextW(temp);
 	}
 }
+
+
+void  MyCEdit::EmptyFile() {
+	FilePath.Empty();
+	SetWindowTextW(_T(""));
+}

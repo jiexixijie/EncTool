@@ -121,55 +121,30 @@ void CBlowfishPage::OnBnClickedButtonEnc()
 	else {
 		CFile fileR, fileW;
 		CString FileW_path = FileDlg_GetSavePath();
-		if (m_Data.FilePath == FileW_path) {
+		CString FileR_path = m_Data.FilePath;
+		if (FileR_path == FileW_path) {
 			MessageBox(_T("两个文件应不同"));
 			return;
 		}
-		if (fileR.Open(m_Data.FilePath, CFile::modeRead) == 0) {
-			MessageBox(_T("读取失败"));
-			m_EncData.SetWindowTextW(_T(""));
-			return;
+		int result = b.EncFile(FileR_path, FileW_path, key_c, iv_c, Blowfish_TYPE_List[m_EncType_cbox.GetCurSel()]);
+		switch (result)
+		{
+		case ReadError:
+			MessageBox(_T("文件读取失败"));
+			m_EncData.EmptyFile();
+			break;
+		case WriteError:
+			MessageBox(_T("文件写入失败"));
+			m_EncData.EmptyFile();
+			break;
+		case Success:
+			//显示加密后密文
+			m_EncData.showFileHexData(FileW_path);
+			break;
+		default:
+			MessageBox(_T("加密失败"));
+			m_EncData.EmptyFile();
 		}
-		if (fileW.Open(FileW_path, CFile::modeCreate | CFile::modeReadWrite) == 0) {
-			MessageBox(_T("创建失败"));
-			m_EncData.SetWindowTextW(_T(""));
-			return;
-		}
-		ULONGLONG filesize = fileR.GetLength();
-		char filedata[1024], CipherData[1024];
-		int Readsize = 1024;
-		int cipherlen = 0;
-		//每1024字节一个循环 加密文件
-		while (Readsize < filesize) {
-			fileR.Read(filedata, 1024);
-			if (b.EncData(filedata, 1024, CipherData, cipherlen, key_c, iv_c, Blowfish_TYPE_List[m_EncType_cbox.GetCurSel()]) != Success) {
-				MessageBox(_T("加密失败"));
-				m_EncData.SetWindowTextW(_T(""));
-				fileR.Close();
-				fileW.Close();
-				return;
-			}
-			//写入部分密文
-			fileW.Write(CipherData, 1024);
-			filesize -= 1024;
-		}
-		if (filesize != 0) {
-			memset(filedata, 0, sizeof(char) * 1024);
-			memset(CipherData, 0, sizeof(char) * 1024);
-			fileR.Read(filedata, filesize);
-			if (b.EncData(filedata, filesize, CipherData, cipherlen, key_c, iv_c, Blowfish_TYPE_List[m_EncType_cbox.GetCurSel()]) != Success) {
-				MessageBox(_T("加密失败"));
-				m_EncData.SetWindowTextW(_T(""));
-				fileR.Close();
-				fileW.Close();
-				return;
-			}
-			fileW.Write(CipherData, cipherlen);
-		}
-		fileR.Close();
-		fileW.Close();
-		//显示加密后密文
-		m_EncData.showFileHexData(FileW_path);
 	}
 	UpdateData(FALSE);
 
@@ -223,55 +198,29 @@ void CBlowfishPage::OnBnClickedButtonDec()
 	else {
 		CFile fileR, fileW;
 		CString FileW_path = FileDlg_GetSavePath();
+		CString FileR_path = m_EncData.FilePath;
 		if (m_EncData.FilePath == FileW_path) {
 			MessageBox(_T("两个文件应不同"));
 			return;
 		}
-		if (fileR.Open(m_EncData.FilePath, CFile::modeRead) == 0) {
-			MessageBox(_T("读取失败"));
-			m_Data.SetWindowTextW(_T(""));
-			return;
+		int result = b.DecFile(FileR_path, FileW_path, key_c, iv_c, Blowfish_TYPE_List[m_EncType_cbox.GetCurSel()]);
+		switch (result)
+		{
+		case ReadError:
+			MessageBox(_T("文件读取失败"));
+			m_Data.EmptyFile();
+			break;
+		case WriteError:
+			MessageBox(_T("文件写入失败"));
+			m_Data.EmptyFile();
+			break;
+		case Success:
+			m_Data.showFileData(FileW_path);
+			break;
+		default:
+			MessageBox(_T("解密失败"));
+			m_Data.EmptyFile();
 		}
-		if (fileW.Open(FileW_path, CFile::modeCreate | CFile::modeReadWrite) == 0) {
-			MessageBox(_T("创建失败"));
-			m_Data.SetWindowTextW(_T(""));
-			return;
-		}
-		ULONGLONG filesize = fileR.GetLength();
-		char filedata[1024], DecData[1024];
-		int Readsize = 1024;
-		int DecDatalen = 0;
-		//每1024字节一个循环 解密文件
-		while (Readsize < filesize) {
-			fileR.Read(filedata, 1024);
-			if (b.DecData(filedata, 1024, DecData, DecDatalen, key_c, iv_c, Blowfish_TYPE_List[m_EncType_cbox.GetCurSel()]) != Success) {
-				MessageBox(_T("解密失败"));
-				m_Data.SetWindowTextW(_T(""));
-				fileR.Close();
-				fileW.Close();
-				return;
-			}
-			//写入部分密文
-			fileW.Write(DecData, 1024);
-			filesize -= 1024;
-		}
-		if (filesize != 0) {
-			memset(filedata, 0, sizeof(char) * 1024);
-			memset(DecData, 0, sizeof(char) * 1024);
-			fileR.Read(filedata, filesize);
-			if (b.DecData(filedata, filesize, DecData, DecDatalen, key_c, iv_c, Blowfish_TYPE_List[m_EncType_cbox.GetCurSel()]) != Success) {
-				MessageBox(_T("解密失败"));
-				m_Data.SetWindowTextW(_T(""));
-				fileR.Close();
-				fileW.Close();
-				return;
-			}
-			fileW.Write(DecData, DecDatalen);
-		}
-		fileR.Close();
-		fileW.Close();
-		//显示解密后数据
-		m_Data.showFileData(FileW_path);
 	}
 	UpdateData(FALSE);
 

@@ -443,6 +443,7 @@ void CRSAPage::OnCbnSelchangeCombo6()
 	int index = m_CertType.GetCurSel();
 	m_Privatekey.SetWindowTextW(_T(""));
 	m_Publickey.SetWindowTextW(_T(""));
+	m_encpwd.SetWindowTextW(_T(""));
 	//PKCS#8 隐藏私钥密码两个控件并清空
 	if (index == 0) {
 		m_encpwdStext.ShowWindow(SW_HIDE);

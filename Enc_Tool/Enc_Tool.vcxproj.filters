@@ -72,9 +72,6 @@
     <ClInclude Include="CBlowfishPage.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="COtherPage.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="C_RC4.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -88,6 +85,18 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CSignVerifyPage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COtherPage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Other.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSetMonListPage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="C_SymmetricEnc.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -140,9 +149,6 @@
     <ClCompile Include="CBlowfishPage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="COtherPage.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="C_RC4.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -156,6 +162,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CSignVerifyPage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="COtherPage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Other.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CSetMonListPage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="C_SymmetricEnc.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
